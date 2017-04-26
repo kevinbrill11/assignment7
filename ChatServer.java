@@ -1,17 +1,42 @@
 package assignment7;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Observable;
 
 //import day23network.observer.ClientObserver;
 //import day23network.observer.ChatServer.ClientHandler;
 
 public class ChatServer extends Observable{
+	ClientObserver outToClient;
+    private ServerSecurity ss;
+    int[] primes = {3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97};
+    //3 => assign unique number
+    //5 => register new username/password
+    //7 => verify username/password
+    //11 => user is requesting a username
+    //13 => user has left chat
+    int userIndex;
+    HashMap<String, Integer> usernames;
+    HashSet<String> clientsLoggedIn;
+    
+    public static void main(String[] args){
+    	System.out.println("Server started.");
+    	new ChatServer().start();
+    }
+
 	public void start(){
+		usernames = new HashMap<String,Integer>();
+		clientsLoggedIn = new HashSet<String>();
+		userIndex = 5;
+		initSecurity();
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(4243);
@@ -24,45 +49,138 @@ public class ChatServer extends Observable{
 			try {
 				clientSocket = serverSocket.accept();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				System.out.println("Problem with accept()");
 				e.printStackTrace();
 			}
-			ClientObserver writer = null;
+			//ClientObserver writer = null;
 			try {
-				writer = new ClientObserver(clientSocket.getOutputStream());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				//writer = new ClientObserver(clientSocket.getOutputStream());
+				outToClient = new ClientObserver(clientSocket.getOutputStream());
+
+			} catch (Exception e) {
+				System.out.println("Problem with new ClientObserver");
 				e.printStackTrace();
 			}
-			Thread t = new Thread(new ClientHandler(clientSocket));
+			Thread t = new Thread(new ClientHandler(clientSocket, this, outToClient));
 			t.start();
-			this.addObserver(writer);
+			this.addObserver(outToClient);
 			System.out.println("got a connection");
 		}
 	}
 	class ClientHandler implements Runnable {
-		private BufferedReader reader;
-
-		public ClientHandler(Socket clientSocket) {
+		int unique;
+		ObjectInputStream inFromClient;
+		ClientObserver output;
+		ChatServer server;
+		public ClientHandler(Socket clientSocket, ChatServer s, ClientObserver o) {
 			Socket sock = clientSocket;
+			unique = primes[userIndex];
+			server = s;
+			output = o;
 			try {
-				reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-			} catch (IOException e) {
-				e.printStackTrace();
-		}
-	}
-
-		public void run() {
-			String message;
-			try {
-				while ((message = reader.readLine()) != null) {
-					System.out.println("server read "+message);
-					setChanged();
-					notifyObservers(message);
-				}
+	            inFromClient = new ObjectInputStream(sock.getInputStream());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+
+		//@SuppressWarnings("unchecked")
+		public void run() {
+			try {
+				boolean done = false;
+				while (!done) {
+					/*LinkedList<Message> inList = new LinkedList<>();
+		            Message inMsg = null;
+		            inList = (LinkedList<Message>)inFromClient.readObject();
+		            inMsg = inList.pop(); */
+					System.out.println("At top of server reader #" + unique);
+					Message message = (Message) inFromClient.readObject();
+					System.out.println("Server read message " + message.getCode() + " " + message.getMessage());
+					
+					if(message.getCode()%3 == 0){
+						message.setCode(message.getCode()*primes[userIndex]);
+						userIndex++;
+					}
+					
+					else if(message.getCode()%5 == 0){ //register new username/password pair
+						System.out.println("registering new user");
+						if(ss.registerNewUser(message.getUsername(), message.getPassword()))
+							message.setSuccess(true);
+						else message.setSuccess(false);
+					}
+					
+					else if(message.getCode()%7 == 0){ //verify username/password pair
+						if(clientsLoggedIn.contains(message.getUsername())){
+							message.setSuccess(false);
+							message.setMessage("User " + "\"" + message.getUsername() + "\"" + " is already logged in");
+						}
+						else if(ss.logIn(message.getUsername(), message.getPassword())){
+							message.setSuccess(true);
+							usernames.put(message.getUsername(), message.getCode()/7);
+							clientsLoggedIn.add(message.getUsername());
+						}
+						else{
+							message.setSuccess(false);
+							message.setMessage("Unrecognized username/password combination");
+						}
+					}
+					
+					else if(message.getCode()%11 == 0){ //user is requesting a username
+						if(usernames.containsKey(message.getUsername())){
+							message.setCode(message.getCode() * ((int) usernames.get(message.getUsername())));
+							message.setSuccess(true);
+						}
+						else
+							message.setSuccess(false);
+					}
+					
+					else if(message.getCode()%13 != 0){
+						String sender = null;
+						for(String name: usernames.keySet()){
+							if(usernames.get(name) == unique){
+								sender = name;
+							}
+						}
+						if(sender == null){
+							sender = "xX_Hacker69_Xx";
+						}
+						
+						sender += ": ";
+						
+						message.setMessage(sender+message.getMessage());
+						
+					}
+					
+					setChanged();
+					notifyObservers(message);
+					
+					if(message.getCode()%13 == 0){//user is logging off
+						System.out.println("server logoff protocol");
+						server.deleteObserver(output);
+						done = true;
+						
+						String sender = null;
+						for(String name: usernames.keySet()){
+							if(usernames.get(name) == unique){
+								sender = name;
+							}
+						}
+						clientsLoggedIn.remove(sender);
+					}
+				}
+			} catch (Exception e) {
+				System.out.println("Problem with server reading message");
+				e.printStackTrace();
+			}
+		}
+	}
+		
+	public boolean isSpecialCode(int n){
+		return n%3==0 || n%5==0 || n%7==0;
+	}
+	
+	public void initSecurity(){
+		ss = new ServerSecurity();
+		
 	}
 }
