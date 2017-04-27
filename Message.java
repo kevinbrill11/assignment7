@@ -12,7 +12,7 @@ public class Message implements java.io.Serializable{
 	private String username;
 	private String password;
 	private boolean success;
-	HashSet<Integer> recipients;
+	HashSet<String> recipients;
 	
 	public Message(int c, String m){
 		code = c;

@@ -2,6 +2,7 @@ package assignment7;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -20,6 +21,7 @@ public class ChatClient implements Runnable{
 	boolean loggedIn;
 	String errorMessage;
 	ChatClientController chatControl;
+	ConversationController convControl;
 	
 
 	public void run() {
@@ -35,6 +37,10 @@ public class ChatClient implements Runnable{
 	
 	public void setController(ChatClientController c){
 		chatControl = c;
+	}
+	
+	public void setComposer(ConversationController c){
+		convControl = c;
 	}
 	
 	public void registerNewUser(String username, String password){
@@ -140,6 +146,14 @@ public class ChatClient implements Runnable{
 							errorMessage = "Successful login";
 							loggedIn = true;
 							
+						}
+					}
+					
+					if(message.getCode()%11 == 0 && message.getCode()%unique == 0){//request username list
+						String[] list = message.getUsername().split(" ");
+						ArrayList<String> names = new ArrayList<String>();
+						for(int k=0; k<list.length; k++){
+							names.add(list[k]);
 						}
 					}
 					

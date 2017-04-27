@@ -21,7 +21,7 @@ public class ChatServer extends Observable{
     //3 => assign unique number
     //5 => register new username/password
     //7 => verify username/password
-    //11 => user is requesting a username
+    //11 => user is requesting users online
     //13 => user has left chat
     //17 => previous user returning, reassign unique
     int userIndex;
@@ -133,13 +133,12 @@ public class ChatServer extends Observable{
 						}
 					}
 					
-					else if(message.getCode()%11 == 0){ //user is requesting a username
-						if(usernames.containsKey(message.getUsername())){
-							message.setCode(message.getCode() * usernames.get(message.getUsername()));
-							message.setSuccess(true);
+					else if(message.getCode()%11 == 0){ //user is requesting users online
+						String names = "";
+						for(String name: usernames.keySet()){
+							names += name + " ";
 						}
-						else
-							message.setSuccess(false);
+						message.setUsername(names);
 					}
 					
 					else if(message.getCode()%13 != 0){
