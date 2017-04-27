@@ -31,13 +31,6 @@ public class ChatClient implements Runnable{
 			e.printStackTrace();
 		}
 		assignUnique();
-		
-//		loggedIn = false;
-//		boolean dummy = true;
-//		while(dummy){}
-//		
-//		boolean done = false;
-//		while(!done){}
 	}
 	
 	public void setController(ChatClientController c){
@@ -136,6 +129,10 @@ public class ChatClient implements Runnable{
 					}
 					
 					if(message.getCode()%7 == 0 && message.getCode()%unique == 0){
+						if(message.getCode()%17==0){
+							unique = ((message.getCode()/7)/17)/unique;
+							System.out.println("redid unique: " + unique);
+						}
 						if(!message.success()){
 							errorMessage = message.getMessage();
 						}

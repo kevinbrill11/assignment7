@@ -23,6 +23,7 @@ public class ChatServer extends Observable{
     //7 => verify username/password
     //11 => user is requesting a username
     //13 => user has left chat
+    //17 => previous user returning, reassign unique
     int userIndex;
     HashMap<String, Integer> usernames;
     HashSet<String> clientsLoggedIn;
@@ -35,7 +36,7 @@ public class ChatServer extends Observable{
 	public void start(){
 		usernames = new HashMap<String,Integer>();
 		clientsLoggedIn = new HashSet<String>();
-		userIndex = 5;
+		userIndex = 6;
 		initSecurity();
 		ServerSocket serverSocket = null;
 		try {
@@ -97,7 +98,7 @@ public class ChatServer extends Observable{
 					Message message = (Message) inFromClient.readObject();
 					System.out.println("Server read message " + message.getCode() + " " + message.getMessage());
 					
-					if(message.getCode()%3 == 0){
+					if(message.getCode()%3 == 0){ //assigning unique number
 						message.setCode(message.getCode()*primes[userIndex]);
 						userIndex++;
 					}
@@ -116,7 +117,14 @@ public class ChatServer extends Observable{
 						}
 						else if(ss.logIn(message.getUsername(), message.getPassword())){
 							message.setSuccess(true);
-							usernames.put(message.getUsername(), message.getCode()/7);
+							if(usernames.containsKey(message.getUsername())){
+								message.setCode((message.getCode()*17));
+								message.setCode(message.getCode()*usernames.get(message.getUsername()));
+								unique = usernames.get(message.getUsername());
+								userIndex--;								
+							}
+							else
+								usernames.put(message.getUsername(), message.getCode()/7);
 							clientsLoggedIn.add(message.getUsername());
 						}
 						else{
@@ -127,7 +135,7 @@ public class ChatServer extends Observable{
 					
 					else if(message.getCode()%11 == 0){ //user is requesting a username
 						if(usernames.containsKey(message.getUsername())){
-							message.setCode(message.getCode() * ((int) usernames.get(message.getUsername())));
+							message.setCode(message.getCode() * usernames.get(message.getUsername()));
 							message.setSuccess(true);
 						}
 						else
