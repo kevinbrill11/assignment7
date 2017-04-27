@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="assignment7.loginView.ChatClientController">
    <children>
@@ -35,12 +34,8 @@
                           </buttons>
                         </ButtonBar>
                         <Text fx:id="conversationName" layoutX="20.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Conversation name" />
-                        <TextFlow fx:id="displayParent" layoutX="96.0" layoutY="35.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
-                           <children>
-                              <Text fx:id="display" strokeType="OUTSIDE" strokeWidth="0.0" text=" " wrappingWidth="17.0" />
-                           </children>
-                        </TextFlow>
                         <Button fx:id="conversation" layoutX="14.0" layoutY="524.0" mnemonicParsing="false" onAction="#newConversation" prefHeight="31.0" prefWidth="144.0" text="New Conversation" />
+                        <TextArea fx:id="display" layoutX="7.0" layoutY="47.0" prefHeight="270.0" prefWidth="406.0" AnchorPane.bottomAnchor="280.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
                      </children>
                   </AnchorPane>
               </items>

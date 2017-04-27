@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class ChatRoomMain extends Application {
-	private Stage primaryStage, secondStage;
+	private Stage primaryStage, secondStage, thirdStage;
 	private BorderPane rootLayout;
 	private ObservableList<Conversation> conversations = FXCollections.observableArrayList();
 	public ChatRoomMain(){
@@ -89,7 +89,20 @@ public class ChatRoomMain extends Application {
 			controller.setSecondStage(secondStage);
 			client.setController(controller2);
 			
-			controller2.setThirdStage(primaryStage);
+			thirdStage = new Stage();
+			thirdStage.setTitle("New Conversation");
+			FXMLLoader loader3 = new FXMLLoader();
+			loader3.setLocation(ChatRoomMain.class.getResource("loginView/NewConversation.fxml"));
+			System.out.println(loader3.getLocation());
+			AnchorPane newConversation = (AnchorPane) loader3.load();
+			ConversationController controller3 = loader3.getController();
+			controller2.setStage(thirdStage);
+			Scene scene3 = new Scene(newConversation);
+			controller3.setClient(client);//TODO
+			thirdStage.setScene(scene3);
+
+			controller2.setThirdStage(thirdStage);
+			//client.setComposer(controller3);
 			new Thread(client).start();
 			
 		}
