@@ -30,9 +30,8 @@ public class ChatClientController {
     @FXML
     private Text conversationName;
     @FXML
-    private Text display;
-    @FXML
-    private TextFlow displayParent;
+    private TextArea display;
+   
     private Stage stage;
     private Scene scene;
     private ChatClient client;
