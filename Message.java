@@ -27,6 +27,11 @@ public class Message implements java.io.Serializable{
 		password = p;
 		message = null;
 	}
+	public Message(int c, String u, HashSet<String> recipients){ //TODO: check over this constructor, it's for the group chat functionality
+		code = c;
+		username = u;
+		this.recipients = recipients;
+	}
 	
 	public int getCode(){
 		return code;

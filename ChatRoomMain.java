@@ -96,8 +96,8 @@ public class ChatRoomMain extends Application {
 			System.out.println(loader3.getLocation());
 			AnchorPane newConversation = (AnchorPane) loader3.load();
 			ConversationController controller3 = loader3.getController();
-			controller2.setStage(thirdStage);
 			Scene scene3 = new Scene(newConversation);
+			controller2.setController3(controller3);
 			controller3.setClient(client);//TODO
 			controller3.initializeList();
 			thirdStage.setScene(scene3);

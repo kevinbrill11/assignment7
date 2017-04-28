@@ -27,7 +27,7 @@
          <children>
             <Label text="Conversation Name:" GridPane.halignment="CENTER" />
             <Label text="Recipients:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-            <TextField GridPane.columnIndex="1">
+            <TextField fx:id="coversationName" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>
@@ -52,6 +52,6 @@
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <Button layoutX="307.0" layoutY="455.0" minWidth="80.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="80.0" text="OK" />
+      <Button fx:id="okButton" layoutX="307.0" layoutY="455.0" minWidth="80.0" mnemonicParsing="false" onAction="#newConversationPress" prefHeight="31.0" prefWidth="80.0" text="OK" />
    </children>
 </AnchorPane>

@@ -36,6 +36,7 @@ public class ChatClientController {
     private Scene scene;
     private ChatClient client;
     private Stage thirdStage;
+    private ConversationController controller3;
     
     private String chat;
     
@@ -78,8 +79,13 @@ public class ChatClientController {
     @FXML
     private void newConversation(){
     	System.out.println("TEST BUTTON");
+		controller3.setStage(thirdStage);
     	client.getOnline();
-    	thirdStage.show();
+    	thirdStage.show(); //TODO: We're getting errors when you close the new conversation window and then open it again
+    }
+    
+    public void setController3(ConversationController c3){
+    	controller3 = c3;
     }
     
     

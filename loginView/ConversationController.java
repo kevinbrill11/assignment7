@@ -11,15 +11,37 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class ConversationController {
 	@FXML
 	private ListView<Item> listView = new ListView<Item>();
+	@FXML
+	private TextField coversationName;
+	@FXML
+	private Button okButton;
+	
 	private ObservableList<Item> recipientList = FXCollections.observableArrayList(); 
 	private ChatClient client;
+	private Stage stage;
+	
+	@FXML
+	public void newConversationPress(){
+		//TODO: make a new conversation with the selected recipients
+		//Message message =  new Message() with set of recipients
+		//Conversation newConversation = new Conversation (okButton.getText(), message);
+		//add conversation to table of conversations for each individual client
+		stage.hide();
+	}
+	
+	public void setStage(Stage fourthStage){
+		stage = fourthStage;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public void initializeList(){
