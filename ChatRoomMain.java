@@ -99,10 +99,11 @@ public class ChatRoomMain extends Application {
 			controller2.setStage(thirdStage);
 			Scene scene3 = new Scene(newConversation);
 			controller3.setClient(client);//TODO
+			controller3.initializeList();
 			thirdStage.setScene(scene3);
 
 			controller2.setThirdStage(thirdStage);
-			//client.setComposer(controller3);
+			client.setComposer(controller3);
 			new Thread(client).start();
 			
 		}

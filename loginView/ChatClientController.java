@@ -78,6 +78,7 @@ public class ChatClientController {
     @FXML
     private void newConversation(){
     	System.out.println("TEST BUTTON");
+    	client.getOnline();
     	thirdStage.show();
     }
     

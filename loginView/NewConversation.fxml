@@ -32,7 +32,7 @@
                   <Insets right="10.0" />
                </GridPane.margin>
             </TextField>
-            <ListView maxHeight="450.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <ListView fx:id="listView" maxHeight="450.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>

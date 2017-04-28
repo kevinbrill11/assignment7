@@ -9,6 +9,7 @@ import java.util.Scanner;
 import javax.swing.*;
 
 import assignment7.loginView.ChatClientController;
+import assignment7.loginView.ConversationController;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -60,6 +61,10 @@ public class ChatClient implements Runnable{
 	public void logOff(){
 		System.out.println("Client starting log off process");
 		sendMessage(new Message(13*unique, null));
+	}
+	
+	public void getOnline(){
+		sendMessage(new Message(11*unique, null));
 	}
 	
 	private void assignUnique(){
@@ -155,6 +160,8 @@ public class ChatClient implements Runnable{
 						for(int k=0; k<list.length; k++){
 							names.add(list[k]);
 						}
+						convControl.setList(names);
+						System.out.println("got usernames: " + names);
 					}
 					
 					if(message.getCode()%13 ==0 && message.getCode()%unique==0){
