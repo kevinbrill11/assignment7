@@ -1,7 +1,10 @@
 package assignment7.loginView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import assignment7.ChatClient;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -29,6 +32,7 @@ public class ConversationController {
 	private ObservableList<Item> recipientList = FXCollections.observableArrayList(); 
 	private ChatClient client;
 	private Stage stage;
+	private HashMap<String, Item> online;
 	
 	@FXML
 	public void newConversationPress(){
@@ -52,11 +56,12 @@ public class ConversationController {
 
 				@Override
 				public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
-					// TODO Auto-generated method stub
+					System.out.println(oldValue.getName());
 					
 				}
 		    	  
 		   });
+		online = new HashMap<String, Item>();
 	}
 	public void setClient(ChatClient c){
     	client = c;
@@ -64,22 +69,54 @@ public class ConversationController {
 	
 	public void setList(ArrayList<String> usernames){
 		//recipientList = FXCollections.observableArrayList(usernames);
+		ArrayList<Integer> removals = new ArrayList<Integer>();
+		for(int i=0; i<listView.getItems().size(); i++){
+			if(!usernames.contains(listView.getItems().get(i).toString())){
+				System.out.println(listView.getItems().get(i).toString() + "is no longer online");
+				removals.add(i);
+			}
+		}
+		Platform.runLater(new Runnable() {
+		    @Override
+		    public void run() {
+		    	while(removals.size() > 0){
+		    		listView.getItems().remove(((int)removals.get(0)));
+		    		removals.remove(((int) 0));
+		    	}
+		    }
+		});
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			System.out.println("don't sleep");
+		}
 		for (int i=0; i<usernames.size(); i++) {
+			if(!listView.getItems().contains(online.get(usernames.get(i)))){
+				System.out.println("NAME TO ADD: " + usernames.get(i));
+//				if(listView.getItems().size()>0)
+//					System.out.println("name contained by list: " + listView.getItems().get(i));
+			
 	            Item item = new Item(usernames.get(i), false);
 
 	            item.onProperty().addListener((obs, wasOn, isNowOn) -> {
 	                if(!wasOn && isNowOn){
-	                	//TODO
-	                	//person selected
+		                	//TODO
+		                	//person selected
 	                }
-	                
+		                
 	                if(wasOn && !isNowOn){
-	                	//TODO
-	                	//person deselected
+		                	//TODO
+		                	//person deselected
 	                }
 	            });
-	            
-	            listView.getItems().add(item);
+	            Platform.runLater(new Runnable() {
+	                @Override
+	                public void run() {
+	                	listView.getItems().add(item); //does not like to add new users
+	                }
+	            });
+	            online.put(usernames.get(i), item);
+			}
 		}
 		
 		listView.setCellFactory(CheckBoxListCell.forListView(new Callback<Item, ObservableValue<Boolean>>() {

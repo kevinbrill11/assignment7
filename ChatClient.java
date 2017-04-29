@@ -74,7 +74,7 @@ public class ChatClient implements Runnable{
 
 	private void setUpNetworking() throws Exception {
 		@SuppressWarnings("resource")
-		Socket sock = new Socket("127.0.0.1", 4243); //127.0.0.1
+		Socket sock = new Socket("127.0.0.1", 8387); //127.0.0.1
 		//InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
 		outToServer = new ObjectOutputStream(sock.getOutputStream());
 	    inFromServer = new ObjectInputStream(sock.getInputStream());
@@ -116,6 +116,7 @@ public class ChatClient implements Runnable{
 		
 		public void run() {
 			boolean done = false;
+			ArrayList<String> names = new ArrayList<String>();
 			while(!done){
 				try {
 					/*LinkedList<Message> inFromServerList = new LinkedList<>();
@@ -156,7 +157,7 @@ public class ChatClient implements Runnable{
 					
 					if(message.getCode()%11 == 0 && message.getCode()%unique == 0){//request username list
 						String[] list = message.getUsername().split(" ");
-						ArrayList<String> names = new ArrayList<String>();
+						names.clear();
 						for(int k=0; k<list.length; k++){
 							names.add(list[k]);
 						}

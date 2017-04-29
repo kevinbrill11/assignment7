@@ -76,16 +76,7 @@ public class ChatRoomMain extends Application {
 			Scene scene2 = new Scene(chatClient);
 			controller2.setClient(client);
 			secondStage.setScene(scene2);
-			secondStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		          public void handle(WindowEvent we) {
-		              client.logOff();
-		          }
-		      }); 
-			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		          public void handle(WindowEvent we) {
-		              client.logOff();
-		          }
-		      }); 
+	
 			controller.setSecondStage(secondStage);
 			client.setController(controller2);
 			
@@ -104,6 +95,21 @@ public class ChatRoomMain extends Application {
 
 			controller2.setThirdStage(thirdStage);
 			client.setComposer(controller3);
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		          public void handle(WindowEvent we) {
+		              client.logOff();
+		          }
+		      });
+			secondStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		          public void handle(WindowEvent we) {
+		              client.logOff();
+		          }
+		      });  
+			thirdStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		          public void handle(WindowEvent we) {
+		              thirdStage.hide();
+		          }
+		      }); 
 			new Thread(client).start();
 			
 		}

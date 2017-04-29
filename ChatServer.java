@@ -40,7 +40,7 @@ public class ChatServer extends Observable{
 		initSecurity();
 		ServerSocket serverSocket = null;
 		try {
-			serverSocket = new ServerSocket(4243);
+			serverSocket = new ServerSocket(8387);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -135,7 +135,7 @@ public class ChatServer extends Observable{
 					
 					else if(message.getCode()%11 == 0){ //user is requesting users online
 						String names = "";
-						for(String name: usernames.keySet()){
+						for(String name: clientsLoggedIn){
 							names += name + " ";
 						}
 						message.setUsername(names);
