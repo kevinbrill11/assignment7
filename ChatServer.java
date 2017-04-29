@@ -25,6 +25,7 @@ public class ChatServer extends Observable{
     //13 => user has left chat
     //17 => previous user returning, reassign unique
     //19 => new conversation
+    //23 => previous conversation
     int userIndex;
     HashMap<String, Integer> usernames;
     HashSet<String> clientsLoggedIn;
@@ -37,7 +38,7 @@ public class ChatServer extends Observable{
 	public void start(){
 		usernames = new HashMap<String,Integer>();
 		clientsLoggedIn = new HashSet<String>();
-		userIndex = 7;
+		userIndex = 8;
 		initSecurity();
 		ServerSocket serverSocket = null;
 		try {

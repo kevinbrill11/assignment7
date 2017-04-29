@@ -18,7 +18,9 @@ import java.awt.event.*;
 
 public class ChatClient implements Runnable{
 	private int unique;
-	String username;
+	private String username;
+	private boolean IPEntered;
+	private String address;
 	private ObjectOutputStream outToServer;
 	private ObjectInputStream inFromServer;
 	ClientSecurity cs;
@@ -80,10 +82,16 @@ public class ChatClient implements Runnable{
 		unique = 0;
 		sendMessage(new Message(3, null));
 	}
+	
+	public void enterIP(String ip){
+		address = ip;
+		IPEntered = true;
+	}
 
 	private void setUpNetworking() throws Exception {
+		while(!IPEntered){}
 		@SuppressWarnings("resource")
-		Socket sock = new Socket("127.0.0.1", 8387); //127.0.0.1 192.168.43.136
+		Socket sock = new Socket(address, 8387); //127.0.0.1 192.168.43.136
 		//InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
 		outToServer = new ObjectOutputStream(sock.getOutputStream());
 	    inFromServer = new ObjectInputStream(sock.getInputStream());
@@ -106,6 +114,12 @@ public class ChatClient implements Runnable{
 			outToServer.flush();
 		} catch (IOException e) {
 			System.out.println("Client writing object issue");
+			try {
+				setUpNetworking();
+			} catch (Exception e1) {
+				System.out.println("nest catch");
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 		}
 	}
@@ -191,10 +205,26 @@ public class ChatClient implements Runnable{
 					}
 					
 					if(message.getCode()%19==0 && message.getRecipients().contains(username)){
-						chatControl.receivedNewMessage(message);
+						//chatControl.receivedNewMessage(message);
 						Conversation c = new Conversation(message.getUsername()+"(new)", message);
 						conversations.add(c);
 						chatControl.displayTable(conversations);
+					}
+					
+					if(message.getCode()%23==0 && message.getRecipients().contains(username)){
+						//chatControl.receivedNewMessage(message);
+						Conversation conv = null; 
+						for(Conversation c: conversations){
+							if(c.toString().equals(message.getUsername())){
+								conv = c;
+							}
+						}
+						conv.getMessage().setMessage(conv.getMessage().getMessage() + "\n" + message.getMessage());
+						chatControl.displayTable(conversations);
+						if(!chatControl.checkUpdateDisplay(conv)){
+							conv.setConversationName(conv.toString() + "(new)");
+							chatControl.displayTable(conversations);
+						}
 					}
 					
 				} catch (Exception ex) {
