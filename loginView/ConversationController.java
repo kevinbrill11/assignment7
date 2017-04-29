@@ -2,8 +2,10 @@ package assignment7.loginView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import assignment7.ChatClient;
+import assignment7.Message;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -25,7 +27,7 @@ public class ConversationController {
 	@FXML
 	private ListView<Item> listView = new ListView<Item>();
 	@FXML
-	private TextField coversationName;
+	private TextField conversationName;
 	@FXML
 	private Button okButton;
 	
@@ -33,14 +35,19 @@ public class ConversationController {
 	private ChatClient client;
 	private Stage stage;
 	private HashMap<String, Item> online;
+	private HashSet<String> recipients;
 	
 	@FXML
 	public void newConversationPress(){
 		//TODO: make a new conversation with the selected recipients
-		//Message message =  new Message() with set of recipients
-		//Conversation newConversation = new Conversation (okButton.getText(), message);
-		//add conversation to table of conversations for each individual client
+		Message msg = new Message(19, null);
+		msg.setRecipients(recipients);
+//		System.out.print("set recipients: ");
+//		for(String n: recipients)                 works
+//			System.out.print(n.toUpperCase());
+		msg.setUsername(conversationName.getText());
 		stage.hide();
+		client.newConversation(msg);
 	}
 	
 	public void setStage(Stage fourthStage){
@@ -51,17 +58,18 @@ public class ConversationController {
 	public void initializeList(){
 		System.out.println("Initializing listview");
 		listView.setItems(recipientList);
-		listView.getSelectionModel().selectedItemProperty().addListener(
-		      new ChangeListener<Item>() {
-
-				@Override
-				public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
-					System.out.println(oldValue.getName());
-					
-				}
-		    	  
-		   });
+//		listView.getSelectionModel().selectedItemProperty().addListener(
+//		      new ChangeListener<Item>() {
+//
+//				@Override
+//				public void changed(ObservableValue<? extends Item> observable, Item oldValue, Item newValue) {
+//					System.out.println(oldValue.getName());
+//					
+//				}
+//		    	  
+//		   });
 		online = new HashMap<String, Item>();
+		recipients = new HashSet<String>();
 	}
 	public void setClient(ChatClient c){
     	client = c;
@@ -100,13 +108,13 @@ public class ConversationController {
 
 	            item.onProperty().addListener((obs, wasOn, isNowOn) -> {
 	                if(!wasOn && isNowOn){
-		                	//TODO
 		                	//person selected
+	                	recipients.add(item.toString());
 	                }
 		                
 	                if(wasOn && !isNowOn){
-		                	//TODO
 		                	//person deselected
+		                recipients.remove(item.toString());
 	                }
 	            });
 	            Platform.runLater(new Runnable() {

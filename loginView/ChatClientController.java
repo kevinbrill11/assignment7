@@ -37,6 +37,7 @@ public class ChatClientController {
     private ChatClient client;
     private Stage thirdStage;
     private ConversationController controller3;
+    Message currentMessage;
     
     private String chat;
     
@@ -55,19 +56,30 @@ public class ChatClientController {
     public void setClient(ChatClient c){
     	client = c;
     	chat = "";
+    	currentMessage = null;
     }
     
     @FXML
 	private void sendMessage() {
     	System.out.println("Pressed " + "\"" + messageField.getText() + "\"");
-    	client.sendMessage(new Message(59, messageField.getText()));
-    	
-    	
+    	if(currentMessage != null){
+    		currentMessage.setMessage(messageField.getText());
+    		client.sendMessage(currentMessage);
+    	}
     }
     
     public void displayText(String s){
     	chat += s + "\n";
     	display.setText(chat);
+    }
+    
+    public void clearDisplay(){
+    	//save current conversation text?
+    	display.setText("");
+    }
+    
+    public void clearMessage(){
+    	messageField.setText("");
     }
     
     @FXML
@@ -86,6 +98,21 @@ public class ChatClientController {
     
     public void setController3(ConversationController c3){
     	controller3 = c3;
+    }
+    
+    public void composeNewMessage(Message m){
+    	//save current conversation text
+    	clearDisplay();
+    	clearMessage();
+    	conversationName.setText(m.getUsername());
+    	currentMessage = m;
+    }
+    
+    public void receivedNewMessage(Message m){
+    	conversationName.setText(m.getUsername());
+    	clearDisplay();
+    	clearMessage();
+    	displayText(m.getMessage());
     }
     
     

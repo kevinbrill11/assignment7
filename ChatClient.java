@@ -16,6 +16,7 @@ import java.awt.event.*;
 
 public class ChatClient implements Runnable{
 	private int unique;
+	String username;
 	private ObjectOutputStream outToServer;
 	private ObjectInputStream inFromServer;
 	ClientSecurity cs;
@@ -90,6 +91,12 @@ public class ChatClient implements Runnable{
 			System.out.println("Client about to send: " + msg.getMessage());
 			/*LinkedList<Message> msgList = new LinkedList<>();
 			msgList.push(new Message(code, msg));*/
+			if(msg.getRecipients() != null){
+				System.out.print("new convo chat recipients: ");
+				for(String n: msg.getRecipients())                    
+					System.out.print(n.toUpperCase());
+				System.out.println();
+			}
 			outToServer.writeObject(msg);
 			outToServer.flush();
 		} catch (IOException e) {
@@ -98,12 +105,14 @@ public class ChatClient implements Runnable{
 		}
 	}
 
-	public static void main(String[] args) {	
-		try {
-			new ChatClient().run();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void newConversation(Message m){
+		if(!m.getRecipients().contains(username))
+			m.getRecipients().add(username);
+//		System.out.print("new convo chat recipients: ");
+//		for(String n: m.getRecipients())                    works
+//			System.out.print(n.toUpperCase());
+//		System.out.println();
+		chatControl.composeNewMessage(m);
 	}
 	public boolean isLoggedIn(){
 		return loggedIn;
@@ -111,6 +120,10 @@ public class ChatClient implements Runnable{
 	
 	public String getMessage(){
 		return errorMessage;
+	}
+	
+	public int getUnique(){
+		return unique;
 	}
 	class IncomingReader implements Runnable {
 		
@@ -141,17 +154,18 @@ public class ChatClient implements Runnable{
 					}
 					
 					if(message.getCode()%7 == 0 && message.getCode()%unique == 0){
-						if(message.getCode()%17==0){
-							unique = ((message.getCode()/7)/17)/unique;
-							System.out.println("redid unique: " + unique);
-						}
 						if(!message.success()){
 							errorMessage = message.getMessage();
 						}
 						else{
+							if(message.getCode()%17==0){
+								unique = ((message.getCode()/7)/17)/unique;
+								System.out.println("redid unique: " + unique);
+							}
+							username = message.getUsername();
+							System.out.println("set username: " + username);
 							errorMessage = "Successful login";
 							loggedIn = true;
-							
 						}
 					}
 					
@@ -169,6 +183,10 @@ public class ChatClient implements Runnable{
 						done = true;
 						outToServer.close();
 						inFromServer.close();
+					}
+					
+					if(message.getCode()%19==0 && message.getRecipients().contains(username)){
+						chatControl.receivedNewMessage(message);
 					}
 					
 				} catch (Exception ex) {

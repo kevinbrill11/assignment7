@@ -24,6 +24,7 @@ public class ChatServer extends Observable{
     //11 => user is requesting users online
     //13 => user has left chat
     //17 => previous user returning, reassign unique
+    //19 => new conversation
     int userIndex;
     HashMap<String, Integer> usernames;
     HashSet<String> clientsLoggedIn;
@@ -36,7 +37,7 @@ public class ChatServer extends Observable{
 	public void start(){
 		usernames = new HashMap<String,Integer>();
 		clientsLoggedIn = new HashSet<String>();
-		userIndex = 6;
+		userIndex = 7;
 		initSecurity();
 		ServerSocket serverSocket = null;
 		try {
@@ -98,6 +99,13 @@ public class ChatServer extends Observable{
 					Message message = (Message) inFromClient.readObject();
 					System.out.println("Server read message " + message.getCode() + " " + message.getMessage());
 					
+					if(message.getRecipients() != null){
+						System.out.print("server recipients: ");
+						for(String skrt: message.getRecipients())
+							System.out.print(skrt.toUpperCase());
+						System.out.println();
+					}
+					
 					if(message.getCode()%3 == 0){ //assigning unique number
 						message.setCode(message.getCode()*primes[userIndex]);
 						userIndex++;
@@ -141,7 +149,7 @@ public class ChatServer extends Observable{
 						message.setUsername(names);
 					}
 					
-					else if(message.getCode()%13 != 0){
+					else if(message.getCode()%13 != 0){ //new message bc %19
 						String sender = null;
 						for(String name: usernames.keySet()){
 							if(usernames.get(name) == unique){
@@ -154,8 +162,7 @@ public class ChatServer extends Observable{
 						
 						sender += ": ";
 						
-						message.setMessage(sender+message.getMessage());
-						
+						message.setMessage(sender+message.getMessage());						
 					}
 					
 					setChanged();

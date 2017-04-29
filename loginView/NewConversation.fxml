@@ -27,7 +27,7 @@
          <children>
             <Label text="Conversation Name:" GridPane.halignment="CENTER" />
             <Label text="Recipients:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-            <TextField fx:id="coversationName" GridPane.columnIndex="1">
+            <TextField fx:id="conversationName" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>

@@ -68,4 +68,12 @@ public class Message implements java.io.Serializable{
 	public boolean success(){
 		return success;
 	}
+	
+	public void setRecipients(HashSet<String> r){
+		recipients = r;
+	}
+	
+	public HashSet<String> getRecipients(){
+		return recipients;
+	}
 }
