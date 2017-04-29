@@ -13,22 +13,20 @@ import java.util.HashMap;
 public class ServerSecurity {
 	private final File folder;
 	private BufferedReader br;
-	BufferedWriter bw;
+	private BufferedWriter bw;
 	private HashMap<String, String> users;
 	boolean init;
 	
 	public ServerSecurity(){
 		//load map with usernames and passwords
 		folder = new File(System.getProperty("user.home"), "Top_Secret");
-		if(!folder.exists() && !folder.mkdir()) {
+		if(!folder.exists()) {
 		   //failed to create the folder, probably exit
 		   throw new RuntimeException("Failed to create save directory.");
 		}
-		
-		br = null;
+		bw = null;
 		try {
 			br = new BufferedReader(new FileReader(new File(folder, "Top_Secret.txt")));
-			bw = new BufferedWriter(new FileWriter(new File(folder, "Top_Secret.txt")));
 		} catch (Exception e) {
 			System.out.println("Reading initialization error");
 			e.printStackTrace();
@@ -56,12 +54,20 @@ public class ServerSecurity {
 	}
 	
 	public boolean registerNewUser(String username, String password){
+		boolean retVal = true;
 		readDatabase();
+		try {
+			bw = new BufferedWriter(new FileWriter(new File(folder, "Top_Secret.txt")));
+		} catch (Exception e) {
+			System.out.println("Reading initialization error");
+			e.printStackTrace();
+		}
 		System.out.println("Server registering new user");
 		System.out.println("Adding " + username + " - " + password);
 		if(users.containsKey(username))
-			return false;
-		users.put(username, password);
+			retVal = false;
+		else
+			users.put(username, password);
 		
 		for(String str: users.keySet())
 		{
@@ -74,14 +80,14 @@ public class ServerSecurity {
 			}
 		}
 		
-		try {
-			bw.close();
-		}
-		catch (IOException e) {
-			System.out.println("BufferedWriter closing error");
-			e.printStackTrace();
-		}
-		return true;
+//		try {
+//			bw.close();
+//		}
+//		catch (IOException e) {
+//			System.out.println("BufferedWriter closing error");
+//			e.printStackTrace();
+//		}
+		return retVal;
 	}
 	
 	
@@ -89,5 +95,16 @@ public class ServerSecurity {
 		if(users.containsKey(username))
 			return users.get(username).equals(password);
 		return false;
+	}
+	
+	public void logOff(){
+		try {
+			if(bw != null)
+				bw.close();
+		}
+		catch (IOException e) {
+			System.out.println("BufferedWriter closing error");
+			e.printStackTrace();
+		}
 	}
 }
