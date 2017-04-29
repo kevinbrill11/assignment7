@@ -87,7 +87,11 @@ public class ServerSecurity {
 //			System.out.println("BufferedWriter closing error");
 //			e.printStackTrace();
 //		}
+<<<<<<< HEAD
+		return true;
+=======
 		return retVal;
+>>>>>>> e29736b1000f88c54b40d4ad685bd34ab533ca10
 	}
 	
 	

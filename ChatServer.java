@@ -166,6 +166,7 @@ public class ChatServer extends Observable{
 					
 					if(message.getCode()%13 == 0){//user is logging off
 						System.out.println("server logoff protocol");
+						ss.logOff();
 						server.deleteObserver(output);
 						done = true;
 						
