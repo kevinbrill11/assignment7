@@ -74,13 +74,13 @@ public class ServerSecurity {
 			}
 		}
 		
-		try {
-			bw.close();
-		}
-		catch (IOException e) {
-			System.out.println("BufferedWriter closing error");
-			e.printStackTrace();
-		}
+//		try {
+//			bw.close();
+//		}
+//		catch (IOException e) {
+//			System.out.println("BufferedWriter closing error");
+//			e.printStackTrace();
+//		}
 		return true;
 	}
 	
