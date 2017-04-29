@@ -99,10 +99,7 @@ public class ChatServer extends Observable{
 					Message message = (Message) inFromClient.readObject();
 					System.out.println("Server read message " + message.getCode() + " " + message.getMessage());
 					if(message.getRecipients() != null){
-						System.out.print("server recipients: ");
-						for(String skrt: message.getRecipients())
-							System.out.print(skrt.toUpperCase());
-						System.out.println();
+						System.out.print("server recipients: " + message.getRecipients().toUpperCase());
 					}
 					
 					if(message.getCode()%3 == 0){ //assigning unique number

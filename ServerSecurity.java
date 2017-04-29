@@ -1,3 +1,4 @@
+
 package assignment7;
 
 import java.io.BufferedReader;
@@ -10,28 +11,37 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class ServerSecurity {
-	private File f;
+	private final File folder;
+	private BufferedReader br;
+	BufferedWriter bw;
 	private HashMap<String, String> users;
+	boolean init;
 	
 	public ServerSecurity(){
 		//load map with usernames and passwords
-		f = new File("Top_Secret.txt");
+		folder = new File(System.getProperty("user.home"), "Top_Secret");
+		if(!folder.exists() && !folder.mkdir()) {
+		   //failed to create the folder, probably exit
+		   throw new RuntimeException("Failed to create save directory.");
+		}
+		
+		br = null;
+		try {
+			br = new BufferedReader(new FileReader(new File(folder, "Top_Secret.txt")));
+			bw = new BufferedWriter(new FileWriter(new File(folder, "Top_Secret.txt")));
+		} catch (Exception e) {
+			System.out.println("Reading initialization error");
+			e.printStackTrace();
+		}
+		
 		users = new HashMap<String, String>();
+		init = false;
 		readDatabase();
 	}
 	
 	private void readDatabase(){
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(new File("Top_Secret.txt")));
-		} catch (FileNotFoundException e) {
-			System.out.println("Reading initialization error");
-			e.printStackTrace();
-		}
-	
 		String username = null;
 		String password = null;
-		
 	
 		try {
 			while ((username = br.readLine())!=null) {
@@ -52,15 +62,6 @@ public class ServerSecurity {
 		if(users.containsKey(username))
 			return false;
 		users.put(username, password);
-		FileWriter fr = null;
-		BufferedWriter bw = null;
-		try {
-			fr = new FileWriter(f);
-			bw = new BufferedWriter(fr);
-		}
-		catch(Exception e){
-			System.out.println("writing initialization exception");
-		}
 		
 		for(String str: users.keySet())
 		{

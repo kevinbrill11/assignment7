@@ -12,7 +12,7 @@ public class Message implements java.io.Serializable{
 	private String username;
 	private String password;
 	private boolean success;
-	HashSet<String> recipients;
+	String recipients;
 	
 	public Message(int c, String m){
 		code = c;
@@ -26,11 +26,6 @@ public class Message implements java.io.Serializable{
 		username = u;
 		password = p;
 		message = null;
-	}
-	public Message(int c, String u, HashSet<String> recipients){ //TODO: check over this constructor, it's for the group chat functionality
-		code = c;
-		username = u;
-		this.recipients = recipients;
 	}
 	
 	public int getCode(){
@@ -69,11 +64,11 @@ public class Message implements java.io.Serializable{
 		return success;
 	}
 	
-	public void setRecipients(HashSet<String> r){
+	public void setRecipients(String r){
 		recipients = r;
 	}
 	
-	public HashSet<String> getRecipients(){
+	public String getRecipients(){
 		return recipients;
 	}
 }

@@ -42,7 +42,10 @@ public class ConversationController {
 	public void newConversationPress(){
 		//TODO: make a new conversation with the selected recipients
 		Message msg = new Message(19, null);
-		msg.setRecipients(recipients);
+		String rec = "";
+		for(String name: recipients)
+			rec += name;
+		msg.setRecipients(rec);
 //		System.out.print("set recipients: ");
 //		for(String n: recipients)                 works
 //			System.out.print(n.toUpperCase());

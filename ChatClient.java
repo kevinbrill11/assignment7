@@ -100,10 +100,7 @@ public class ChatClient implements Runnable{
 			/*LinkedList<Message> msgList = new LinkedList<>();
 			msgList.push(new Message(code, msg));*/
 			if(msg.getRecipients() != null){
-				System.out.print("new convo chat recipients: ");
-				for(String n: msg.getRecipients())                    
-					System.out.print(n.toUpperCase());
-				System.out.println();
+				System.out.println("new convo chat recipients: " + msg.getRecipients().toUpperCase());
 			}
 			outToServer.writeObject(msg);
 			outToServer.flush();
@@ -115,7 +112,7 @@ public class ChatClient implements Runnable{
 
 	public void newConversation(Message m){
 		if(!m.getRecipients().contains(username))
-			m.getRecipients().add(username);
+			m.setRecipients(m.getRecipients() + username);
 //		System.out.print("new convo chat recipients: ");
 //		for(String n: m.getRecipients())                    works
 //			System.out.print(n.toUpperCase());
