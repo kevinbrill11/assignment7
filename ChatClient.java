@@ -192,7 +192,7 @@ public class ChatClient implements Runnable{
 					
 					if(message.getCode()%19==0 && message.getRecipients().contains(username)){
 						chatControl.receivedNewMessage(message);
-						Conversation c = new Conversation(message.getUsername(), message);
+						Conversation c = new Conversation(message.getUsername()+"(new)", message);
 						conversations.add(c);
 						chatControl.displayTable(conversations);
 					}

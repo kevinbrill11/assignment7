@@ -89,6 +89,9 @@ public class ChatClientController {
     public void updateDisplay(Conversation c){
     	display.clear();
     	display.setText(c.getMessage().getMessage());
+    	if(c.getConversationName().get().contains("(new)")){
+    		c.setConversationName(c.getConversationName().get().replace("(new)",""));
+    	}
     }
     
     public void clearDisplay(){

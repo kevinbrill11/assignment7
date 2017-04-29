@@ -18,4 +18,8 @@ public class Conversation {
 	public StringProperty getConversationName(){
 		return conversationName;
 	}
+	
+	public void setConversationName(String s){
+		conversationName.set(s);
+	}
 }
