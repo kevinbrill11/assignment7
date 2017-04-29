@@ -54,7 +54,7 @@ public class LoginScreenController {
 	private void handleUserLogin() {
 	   client.logIn(username.getText(), password.getText());
 	   try {
-		Thread.sleep(100); //TODO: does this work when Internet is involved????
+		Thread.sleep(1000); //TODO: does this work when Internet is involved????
 	} catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

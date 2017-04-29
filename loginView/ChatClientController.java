@@ -69,7 +69,7 @@ public class ChatClientController {
     }
     
     public void displayText(String s){
-    	chat += s + "\n";
+    	//chat += s + "\n";
     	display.setText(chat);
     }
     
