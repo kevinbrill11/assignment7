@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import assignment7.ChatClient;
+import assignment7.Conversation;
 import assignment7.Message;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -48,6 +49,7 @@ public class ConversationController {
 		msg.setUsername(conversationName.getText());
 		stage.hide();
 		client.newConversation(msg);
+		
 	}
 	
 	public void setStage(Stage fourthStage){

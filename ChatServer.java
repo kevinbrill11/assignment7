@@ -98,7 +98,6 @@ public class ChatServer extends Observable{
 					System.out.println("At top of server reader #" + unique);
 					Message message = (Message) inFromClient.readObject();
 					System.out.println("Server read message " + message.getCode() + " " + message.getMessage());
-					
 					if(message.getRecipients() != null){
 						System.out.print("server recipients: ");
 						for(String skrt: message.getRecipients())

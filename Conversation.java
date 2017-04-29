@@ -1,5 +1,6 @@
 package assignment7;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Conversation {
@@ -7,10 +8,10 @@ public class Conversation {
 	Message message;
 	public Conversation(String s, Message m){
 		message = m;
-		conversationName.set(s);
+		conversationName = new SimpleStringProperty(s);
 	}
 	
-	public Message getMessage(String s){
+	public Message getMessage(){
 		return message;
 	}
 	

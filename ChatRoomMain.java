@@ -17,7 +17,6 @@ import javafx.stage.WindowEvent;
 public class ChatRoomMain extends Application {
 	private Stage primaryStage, secondStage, thirdStage;
 	private BorderPane rootLayout;
-	private ObservableList<Conversation> conversations = FXCollections.observableArrayList();
 	public ChatRoomMain(){
 		
 	}
@@ -28,9 +27,7 @@ public class ChatRoomMain extends Application {
 		initRootLayout();
 		showMainView();
 	}
-	public ObservableList<Conversation> getConversations(){
-		return conversations;
-	}
+	
 	
 	
 	 /**

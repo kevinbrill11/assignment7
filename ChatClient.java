@@ -10,6 +10,8 @@ import javax.swing.*;
 
 import assignment7.loginView.ChatClientController;
 import assignment7.loginView.ConversationController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -24,6 +26,8 @@ public class ChatClient implements Runnable{
 	String errorMessage;
 	ChatClientController chatControl;
 	ConversationController convControl;
+	private ObservableList<Conversation> conversations = FXCollections.observableArrayList();
+
 	
 
 	public void run() {
@@ -35,6 +39,10 @@ public class ChatClient implements Runnable{
 			e.printStackTrace();
 		}
 		assignUnique();
+	}
+	
+	public ObservableList<Conversation> getConversations(){
+		return conversations;
 	}
 	
 	public void setController(ChatClientController c){
@@ -75,7 +83,7 @@ public class ChatClient implements Runnable{
 
 	private void setUpNetworking() throws Exception {
 		@SuppressWarnings("resource")
-		Socket sock = new Socket("127.0.0.1", 8387); //127.0.0.1
+		Socket sock = new Socket("127.0.0.1", 8387); //127.0.0.1 192.168.43.136
 		//InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
 		outToServer = new ObjectOutputStream(sock.getOutputStream());
 	    inFromServer = new ObjectInputStream(sock.getInputStream());
@@ -187,6 +195,9 @@ public class ChatClient implements Runnable{
 					
 					if(message.getCode()%19==0 && message.getRecipients().contains(username)){
 						chatControl.receivedNewMessage(message);
+						Conversation c = new Conversation(message.getUsername(), message);
+						conversations.add(c);
+						chatControl.displayTable(conversations);
 					}
 					
 				} catch (Exception ex) {

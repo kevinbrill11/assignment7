@@ -3,6 +3,8 @@ package assignment7.loginView;
 import assignment7.ChatClient;
 import assignment7.Conversation;
 import assignment7.Message;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -59,6 +61,16 @@ public class ChatClientController {
     	currentMessage = null;
     }
     
+    public void displayTable(ObservableList<Conversation> conversations){
+    	Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+            	table.setItems(conversations); 
+            }
+        });
+		
+    }
+    
     @FXML
 	private void sendMessage() {
     	System.out.println("Pressed " + "\"" + messageField.getText() + "\"");
@@ -66,11 +78,17 @@ public class ChatClientController {
     		currentMessage.setMessage(messageField.getText());
     		client.sendMessage(currentMessage);
     	}
+    	
     }
     
     public void displayText(String s){
     	chat += s + "\n";
     	display.setText(chat);
+    }
+    
+    public void updateDisplay(Conversation c){
+    	display.clear();
+    	display.setText(c.getMessage().getMessage());
     }
     
     public void clearDisplay(){
@@ -86,6 +104,9 @@ public class ChatClientController {
     private void initialize() {
         // Initialize the person table with the two columns.
         column.setCellValueFactory(cellData -> cellData.getValue().getConversationName());
+        
+        table.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> updateDisplay(newValue));
     }
     
     @FXML
