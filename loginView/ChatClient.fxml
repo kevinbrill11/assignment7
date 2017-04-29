@@ -29,7 +29,7 @@
                         <TextArea fx:id="messageField" layoutX="111.0" layoutY="447.0" prefHeight="200.0" prefWidth="200.0" promptText="Enter Message" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="350.0" />
                         <ButtonBar layoutX="222.0" layoutY="519.0" prefHeight="40.0" prefWidth="180.0">
                           <buttons>
-                            <Button fx:id="clear" mnemonicParsing="false" text="Clear" />
+                            <Button fx:id="clear" mnemonicParsing="false" onAction="#clearMessage" text="Clear" />
                               <Button fx:id="send" mnemonicParsing="false" onAction="#sendMessage" text="Send" />
                           </buttons>
                         </ButtonBar>

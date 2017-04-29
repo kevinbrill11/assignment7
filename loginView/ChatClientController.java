@@ -81,6 +81,11 @@ public class ChatClientController {
     	
     }
     
+    @FXML
+    private void clearButtonAction(){
+    	clearMessage();
+    }
+    
     public void displayText(String s){
     	//chat += s + "\n";
     	display.setText(chat);
@@ -92,6 +97,7 @@ public class ChatClientController {
     	if(c.getConversationName().get().contains("(new)")){
     		c.setConversationName(c.getConversationName().get().replace("(new)",""));
     	}
+    	updateConversation(c.getMessage());
     }
     
     public void clearDisplay(){
@@ -125,6 +131,14 @@ public class ChatClientController {
     }
     
     public void composeNewMessage(Message m){
+    	//save current conversation text
+    	clearDisplay();
+    	clearMessage();
+    	conversationName.setText(m.getUsername());
+    	currentMessage = m;
+    }
+    
+    public void updateConversation(Message m){
     	//save current conversation text
     	clearDisplay();
     	clearMessage();

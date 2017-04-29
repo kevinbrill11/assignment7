@@ -83,7 +83,7 @@ public class ChatClient implements Runnable{
 
 	private void setUpNetworking() throws Exception {
 		@SuppressWarnings("resource")
-		Socket sock = new Socket("127.0.0.1", 8387); //127.0.0.1 192.168.43.136
+		Socket sock = new Socket("192.168.43.65", 8387); //127.0.0.1 192.168.43.136
 		//InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
 		outToServer = new ObjectOutputStream(sock.getOutputStream());
 	    inFromServer = new ObjectInputStream(sock.getInputStream());
