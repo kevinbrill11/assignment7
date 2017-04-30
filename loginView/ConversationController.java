@@ -44,7 +44,7 @@ public class ConversationController {
 		Message msg = new Message(19, null);
 		String rec = "";
 		for(String name: recipients)
-			rec += name;
+			rec += name + " ";
 		msg.setRecipients(rec);
 //		System.out.print("set recipients: ");
 //		for(String n: recipients)                 works

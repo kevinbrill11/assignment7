@@ -30,7 +30,7 @@ import javafx.scene.layout.*;
 //import day23network.observer.ClientObserver;
 //import day23network.observer.ChatServer.ClientHandler;
 
-public class ChatServer extends Observable{
+public class ChatServer extends Observable implements Runnable{
 	private ClientObserver outToClient;
     private ServerSecurity ss;
     int[] primes = {3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97};
@@ -47,12 +47,12 @@ public class ChatServer extends Observable{
     HashSet<String> clientsLoggedIn;
     
     public static void main(String[] args){
-    	ServerGrfx.initiate(args);
     	System.out.println("Server started.");
-    	new ChatServer().start();
+    	new Thread(new ChatServer()).start();
+    	ServerGrfx.initiate(args);
     }
 
-	public void start(){
+	public void run(){
 		usernames = new HashMap<String,Integer>();
 		clientsLoggedIn = new HashSet<String>();
 		userIndex = 8;
