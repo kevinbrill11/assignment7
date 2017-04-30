@@ -34,13 +34,7 @@ public class ChatClient implements Runnable{
 
 	public void run() {
 		errorMessage = "";
-		try {
-			setUpNetworking();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assignUnique();
+		
 	}
 	
 	public ObservableList<Conversation> getConversations(){
@@ -86,10 +80,17 @@ public class ChatClient implements Runnable{
 	public void enterIP(String ip){
 		address = ip;
 		IPEntered = true;
+		try {
+			setUpNetworking();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assignUnique();
 	}
 
 	private void setUpNetworking() throws Exception {
-		while(!IPEntered){}
+		
 		@SuppressWarnings("resource")
 		Socket sock = new Socket(address, 8387); //127.0.0.1 192.168.43.136
 		//InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());

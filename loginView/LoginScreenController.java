@@ -23,6 +23,10 @@ public class LoginScreenController {
 	private PasswordField password;
 	@FXML
 	private Label errorMessage;
+	@FXML
+	private TextField ipField;
+	@FXML
+	private Button ipButton;
 	private ChatClient client;
 	private Stage stage;
 	private Stage secondStage;
@@ -48,6 +52,15 @@ public class LoginScreenController {
 		e.printStackTrace();
 	}
 	   errorMessage.setText(client.getMessage());
+	}
+	
+	@FXML
+	private void handleIPEntry(){
+		client.enterIP(ipField.getText());
+		enterButton.setDisable(false);
+		registerButton.setDisable(false);
+		username.setDisable(false);
+		password.setDisable(false);
 	}
 	
 	@FXML
