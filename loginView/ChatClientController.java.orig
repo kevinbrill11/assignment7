@@ -161,6 +161,7 @@ public class ChatClientController {
     
     public void updateConversation(Message m){
     	//save current conversation text
+<<<<<<< HEAD
     	clearMessage();
     	conversationName.setText(m.getUsername());
     	ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -184,6 +185,12 @@ public class ChatClientController {
     	if(currentMessage.getCode()%19 == 0){
     		currentMessage.setCode((currentMessage.getCode()/19)*23);
     	}
+=======
+    	clearDisplay();
+    	clearMessage();
+    	conversationName.setText(m.getUsername());
+    	currentMessage = m;
+>>>>>>> 55d0abe53418ef1a86f0310db5f33962467d6570
     }
     
     public void receivedNewMessage(Message m){

@@ -22,4 +22,8 @@ public class Conversation {
 	public void setConversationName(String s){
 		conversationName.set(s);
 	}
+	@Override
+	public String toString(){
+		return conversationName.get();
+	}
 }

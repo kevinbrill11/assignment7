@@ -11,11 +11,27 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Observable;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+
 //import day23network.observer.ClientObserver;
 //import day23network.observer.ChatServer.ClientHandler;
 
 public class ChatServer extends Observable{
-	ClientObserver outToClient;
+	private ClientObserver outToClient;
     private ServerSecurity ss;
     int[] primes = {3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97};
     //3 => assign unique number
@@ -25,11 +41,13 @@ public class ChatServer extends Observable{
     //13 => user has left chat
     //17 => previous user returning, reassign unique
     //19 => new conversation
+    //23 => previous conversation
     int userIndex;
     HashMap<String, Integer> usernames;
     HashSet<String> clientsLoggedIn;
     
     public static void main(String[] args){
+    	ServerGrfx.initiate(args);
     	System.out.println("Server started.");
     	new ChatServer().start();
     }
@@ -37,7 +55,7 @@ public class ChatServer extends Observable{
 	public void start(){
 		usernames = new HashMap<String,Integer>();
 		clientsLoggedIn = new HashSet<String>();
-		userIndex = 7;
+		userIndex = 8;
 		initSecurity();
 		ServerSocket serverSocket = null;
 		try {

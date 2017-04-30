@@ -91,7 +91,11 @@ public class ChatClient implements Runnable{
 	private void setUpNetworking() throws Exception {
 		while(!IPEntered){}
 		@SuppressWarnings("resource")
+<<<<<<< HEAD
 		Socket sock = new Socket(address, 8387); //127.0.0.1 192.168.43.136
+=======
+		Socket sock = new Socket("192.168.43.65", 8387); //127.0.0.1 192.168.43.136
+>>>>>>> 55d0abe53418ef1a86f0310db5f33962467d6570
 		//InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
 		outToServer = new ObjectOutputStream(sock.getOutputStream());
 	    inFromServer = new ObjectInputStream(sock.getInputStream());
