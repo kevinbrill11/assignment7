@@ -94,7 +94,8 @@ public class ChatRoomMain extends Application {
 			client.setComposer(controller3);
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		          public void handle(WindowEvent we) {
-		              client.logOff();
+		        	  if(client.isConnected())
+		        		  client.logOff();
 		          }
 		      });
 			secondStage.setOnCloseRequest(new EventHandler<WindowEvent>() {

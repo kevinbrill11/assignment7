@@ -56,11 +56,15 @@ public class LoginScreenController {
 	
 	@FXML
 	private void handleIPEntry(){
-		client.enterIP(ipField.getText());
-		enterButton.setDisable(false);
-		registerButton.setDisable(false);
-		username.setDisable(false);
-		password.setDisable(false);
+		if(client.enterIP(ipField.getText())){
+			enterButton.setDisable(false);
+			registerButton.setDisable(false);
+			username.setDisable(false);
+			password.setDisable(false);
+			errorMessage.setText("");
+		}
+		else
+			errorMessage.setText(client.getMessage());
 	}
 	
 	@FXML

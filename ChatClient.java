@@ -27,13 +27,17 @@ public class ChatClient implements Runnable{
 	private ObjectOutputStream outToServer;
 	private ObjectInputStream inFromServer;
 	boolean loggedIn;
+	boolean connected = false;
 	String errorMessage;
 	ChatClientController chatControl;
 	ConversationController convControl;
 	private ObservableList<Conversation> conversations = FXCollections.observableArrayList();
-
 	
 
+	
+	public boolean isConnected(){
+		return connected;
+	}
 	public void run() {
 		errorMessage = "";
 		
@@ -79,16 +83,20 @@ public class ChatClient implements Runnable{
 		sendMessage(new Message(3, null));
 	}
 	
-	public void enterIP(String ip){
+	public boolean enterIP(String ip){
+		boolean valid = true;
 		address = ip;
 		IPEntered = true;
 		try {
 			setUpNetworking();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			errorMessage = "Invalid IP";
+			valid = false;
 		}
-		assignUnique();
+		if(valid)
+			assignUnique();
+		
+		return valid;
 	}
 
 	private void setUpNetworking() throws Exception {
@@ -197,6 +205,7 @@ public class ChatClient implements Runnable{
 					if(message.getCode()%3 == 0 && unique == 0){
 						unique = message.getCode()/3;
 						System.out.println("Assigned unique: " + message.getCode()/3);
+						connected = true;
 					}
 					if(message.getCode()%59 == 0){
 						chatControl.displayText(message.getMessage());
