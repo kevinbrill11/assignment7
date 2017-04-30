@@ -26,7 +26,6 @@ public class ChatClient implements Runnable{
 	private String address;
 	private ObjectOutputStream outToServer;
 	private ObjectInputStream inFromServer;
-	ClientSecurity cs;
 	boolean loggedIn;
 	String errorMessage;
 	ChatClientController chatControl;
@@ -130,7 +129,7 @@ public class ChatClient implements Runnable{
 
 	public void newConversation(Message m){
 		if(!m.getRecipients().contains(username))
-			m.setRecipients(m.getRecipients() + username);
+			m.setRecipients(m.getRecipients() + username + " ");
 //		System.out.print("new convo chat recipients: ");
 //		for(String n: m.getRecipients())                    works
 //			System.out.print(n.toUpperCase());
@@ -160,6 +159,27 @@ public class ChatClient implements Runnable{
 	        System.out.println("Error with playing sound.");
 	        ex.printStackTrace();
 	    }
+	}
+	
+	private void adjustRepeatName(Conversation conv, int n){
+		boolean match = false;
+		for(Conversation c: conversations){
+			if(conv.toString().equals(c.toString())){
+				System.out.println(c + " matched with " + conv.toString() + ", iteration: " + n);
+				if(n>1)
+					conv.setConversationName(conv.toString().replace(Integer.toString(n-1), Integer.toString(n)));
+				else
+					conv.setConversationName(conv.toString() + "(" + n + ")");
+				match = true;
+				break;
+			}
+		}
+		
+		if(match){
+			System.out.println("n: " + n);
+			n++;
+			adjustRepeatName(conv, n);
+		}
 	}
 	class IncomingReader implements Runnable {
 		
@@ -223,7 +243,10 @@ public class ChatClient implements Runnable{
 					
 					if(message.getCode()%19==0 && message.getRecipients().contains(username)){
 						//chatControl.receivedNewMessage(message);
-						Conversation c = new Conversation(message.getUsername()+"(new)", message);
+						Conversation c = new Conversation(message.getUsername(), message);
+						adjustRepeatName(c, 1);
+						c.setConversationName(c.getConversationName().get()+"(new)");
+						c.getMessage().setMessage("Recipients: " + c.getMessage().getRecipients() + "\n" + c.getMessage().getMessage());
 						conversations.add(c);
 						chatControl.displayTable(conversations);
 						playSound();

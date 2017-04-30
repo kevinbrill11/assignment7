@@ -48,7 +48,11 @@ public class ChatServer extends Observable implements Runnable{
     
     public static void main(String[] args){
     	System.out.println("Server started.");
+<<<<<<< HEAD
+    	new ChatServer().start();
+=======
     	new Thread(new ChatServer()).start();
+>>>>>>> a69adbed4098512bb40c598c74e162fe7e3c0ecd
     	ServerGrfx.initiate(args);
     }
 
