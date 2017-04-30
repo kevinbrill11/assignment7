@@ -1,5 +1,19 @@
 package assignment7.loginView;
 
+/* CHAT ROOM ConversationController.java
+ * EE422C Project 7 submission by
+ * Replace <...> with your actual data.
+ * Kevin Brill	
+ * kjb2786
+ * 16230
+ * Grayson Barrett
+ * gmb974
+ * 16230
+ * Github URL: https://github.com/kevinbrill11/assignment7
+ * Slip days used: 1
+ * Spring 2017
+ */
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
