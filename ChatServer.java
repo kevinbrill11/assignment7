@@ -47,9 +47,9 @@ public class ChatServer extends Observable{
     HashSet<String> clientsLoggedIn;
     
     public static void main(String[] args){
-    	ServerGrfx.initiate(args);
     	System.out.println("Server started.");
     	new ChatServer().start();
+    	ServerGrfx.initiate(args);
     }
 
 	public void start(){

@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 import assignment7.loginView.ChatClientController;
@@ -145,6 +148,19 @@ public class ChatClient implements Runnable{
 	public int getUnique(){
 		return unique;
 	}
+	
+	public void playSound() {
+	    try {
+	    	File folder = new File(System.getProperty("user.home"), "Top_Secret");
+	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(folder,"youGotmail.wav").getAbsoluteFile());
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(audioInputStream);
+	        clip.start();
+	    } catch(Exception ex) {
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }
+	}
 	class IncomingReader implements Runnable {
 		
 		public void run() {
@@ -210,6 +226,7 @@ public class ChatClient implements Runnable{
 						Conversation c = new Conversation(message.getUsername()+"(new)", message);
 						conversations.add(c);
 						chatControl.displayTable(conversations);
+						playSound();
 					}
 					
 					if(message.getCode()%23==0 && message.getRecipients().contains(username)){
@@ -226,6 +243,7 @@ public class ChatClient implements Runnable{
 							conv.setConversationName(conv.toString() + "(new)");
 							chatControl.displayTable(conversations);
 						}
+						playSound();
 					}
 					
 				} catch (Exception ex) {
